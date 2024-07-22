@@ -26,6 +26,7 @@
           "options": {
             "outputPath": "public",
             "index": "src/index.html",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -75,7 +76,7 @@
                 "input": "node_modules/@ionic/angular/css/flex-utils.css"
               },
               {
-                "input": "src/theme/variables.css"
+                "input": "src/theme/variables.scss"
               }
             ],
             "scripts": []

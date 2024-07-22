@@ -46,3 +46,5 @@ Thumbs.db
 *-debug.log
 .runtimeconfig.json
 /src/environments/base.ts
+!/package-lock.json
+/public/*
