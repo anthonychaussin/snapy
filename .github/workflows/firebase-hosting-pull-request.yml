@@ -23,7 +23,7 @@ jobs:
           BASE_CONFIG: ${{ secrets.BASE }}
         run: |
           echo $BASE_CONFIG | base64 --decode > "src/environments/base.ts"
-      - run: npm ci && npm run buildDev
+      - run: npm install && npm run buildDev
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
