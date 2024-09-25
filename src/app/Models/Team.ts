@@ -5,9 +5,21 @@ import {IBaseObject} from './IBaseObject';
 export class Team extends Base implements IBaseObject {
   public static override DBName: string = 'team';
 
+  /**
+   * Array of {@link User} in this team
+   * @type {User[]}
+   */
   public Users: User[] = [];
+  /**
+   * Array of {@link Project} for this team
+   * @type {Project[]}
+   */
   public Projects: Project[] = [];
 
+  /**
+   * Path to object in Realtime DB
+   * @return {string}
+   */
   get RealTimePath(): string {
     if (!this.ParentsIds.has(Company.DBName)) {
       throw new NotFoundException('You must provide the parent Company uuid');
@@ -30,6 +42,11 @@ export class Team extends Base implements IBaseObject {
     this.Projects = this.Projects.map(d => new Project(d));
   }
 
+  /**
+   * Convert object to Realtime object
+   * Only new element are out
+   * @return {any}
+   */
   ToRealTimeObject(): any {
     return {
       users: this.Users.map(u => u.Uuid),

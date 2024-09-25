@@ -5,8 +5,16 @@ import {IBaseObject} from './IBaseObject';
 export class Department extends Base implements IBaseObject {
   static override DBName: string = 'department';
 
+  /**
+   * Array of {@link Team} in this department
+   * @type {Team[]}
+   */
   public Teams: Team[] = [];
 
+  /**
+   * Path to object in Realtime DB
+   * @return {string}
+   */
   get RealTimePath(): string {
     if (!this.ParentsIds.has(Company.DBName)) {
       throw new NotFoundException('You must provide the parent Company uuid');
@@ -25,6 +33,11 @@ export class Department extends Base implements IBaseObject {
     this.Teams = this.Teams.map(t => new Team(t));
   }
 
+  /**
+   * Convert object to Firestore object
+   * Only new element are out
+   * @return {any}
+   */
   ToRealTimeObject(): any {
     return {
       teams: this.Teams,

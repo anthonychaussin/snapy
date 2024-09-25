@@ -4,8 +4,17 @@ import {IBaseObject} from './IBaseObject';
 
 export class Project extends Base implements IBaseObject {
   public static override DBName: string = 'project';
+  /**
+   * Array of {@link Task} of this project
+   * @type {Task[]}
+   */
   public Task: Task[] = [];
 
+  /**
+   * Convert object to Realtime object
+   * Only new element are out
+   * @return {any}
+   */
   ToRealTimeObject(): any {
     return {
       task: Task,
@@ -13,6 +22,10 @@ export class Project extends Base implements IBaseObject {
     };
   }
 
+  /**
+   * Path to object in Realtime DB
+   * @return {string}
+   */
   get RealTimePath(): string {
     if (!this.ParentsIds.has(Company.DBName)) {
       throw new NotFoundException('You must provide the parent Company uuid');

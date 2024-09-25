@@ -9,13 +9,15 @@ import {IFirebaseService} from './IFirebase.service';
             })
 export class SnapService extends FirebaseService implements IFirebaseService<Snap> {
 
+  /**
+   * Constructor
+   */
   constructor() {super(); }
 
   /**
-   * Delete a Department
-   * @return {boolean}
-   * @constructor
-   * @param departments
+   * Delete all {@link Snap}
+   * @param {Snap[]} snaps Array of {@link Snap} to delete
+   * @return {Promise<boolean>} true if succeed, else false
    */
   async Delete(snaps: Snap[]): Promise<boolean> {
     try {
@@ -29,6 +31,12 @@ export class SnapService extends FirebaseService implements IFirebaseService<Sna
     }
   }
 
+  /**
+   * Get a {@link Snap}
+   * @param {string} basePath Base path of {@link Snap}
+   * @param {string} uuid Uuid of {@link Snap} to fetch
+   * @return {Promise<Snap | void>} return {@link Snap} object, void if not found
+   */
   async Get(basePath: string, uuid: string): Promise<Snap | void> {
     try {
       return await this.FirestoreGet<Snap>(Snap, basePath, uuid).catch((e) => {
@@ -44,10 +52,21 @@ export class SnapService extends FirebaseService implements IFirebaseService<Sna
     }
   }
 
+  /**
+   * Get all {@link Snap}
+   * @param {string} basePath Base path of {@link Snap}
+   * @param {string[]} uuid Array of {@link Snap} Uuid to fetch
+   * @return {Promise<(Snap | void)[]>} return {@link Snap} objects, void if not found
+   */
   async GetAll(basePath: string, uuid: string[]): Promise<(Snap | void)[]> {
     return Promise.all(uuid.map(u => this.Get(basePath, u)));
   }
 
+  /**
+   * Create new {@link Snap}
+   * @param {Snap[]} object Array of {@link Snap} to create
+   * @return {Promise<Snap[]>} return {@link Snap} with there Uuid
+   */
   async Save(object: Snap[]): Promise<Snap[]> {
     try {
       return await this.RealTimeCreate<Snap>(object);
@@ -59,6 +78,11 @@ export class SnapService extends FirebaseService implements IFirebaseService<Sna
     }
   }
 
+  /**
+   * Update the {@link Snap} (only new data are inserted)
+   * @param {Snap[]} object Array {@link Snap} to update
+   * @return {Promise<boolean>} true if {@link Snap} are updated
+   */
   async Update(object: Snap[]): Promise<boolean> {
     try {
       await this.RealTimeUpdate<Snap>(object);

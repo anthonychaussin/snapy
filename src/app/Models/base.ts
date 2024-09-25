@@ -1,7 +1,13 @@
-import {NotImplementedException} from './Exception';
-
 export abstract class Base {
+  /**
+   * Unique Identifier
+   * @type {string}
+   */
   public Uuid: string;
+  /**
+   * Name
+   * @type {string}
+   */
   public Name: string;
   public ParentsIds: Map<string, string> = new Map();
   public static DBName: string;

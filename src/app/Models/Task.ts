@@ -5,10 +5,19 @@ import {IBaseObject} from './IBaseObject';
 export class Task extends Base implements IBaseObject {
   public static override DBName: string = 'task';
 
+  /**
+   * Convert object to Realtime object
+   * Only new element are out
+   * @return {any}
+   */
   ToRealTimeObject(): any {
     return this.BaseToObject();
   }
 
+  /**
+   * Path to object in Realtime DB
+   * @return {string}
+   */
   get RealTimePath(): string {
     if (!this.ParentsIds.has(Company.DBName)) {
       throw new NotFoundException('You must provide the parent Company uuid');

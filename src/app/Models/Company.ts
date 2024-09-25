@@ -5,10 +5,26 @@ import {IBaseObject} from './IBaseObject';
 export class Company extends Base implements IBaseObject {
   static override DBName: string = 'company';
 
+  /**
+   * Company's logo
+   * @type {string}
+   */
   public Logo: string = './resources/company_logo.jpeg';
+  /**
+   * Company's color
+   * @type {string}
+   */
   public Color: string = 'FFF';
+  /**
+   * Array of {@link Department} inside company
+   * @type {Department[]}
+   */
   public Departments: Department[] = [];
 
+  /**
+   * Path to object in Realtime DB
+   * @return {string}
+   */
   get RealTimePath() {
     return Company.DBName;
   }
@@ -23,8 +39,12 @@ export class Company extends Base implements IBaseObject {
     this.Departments = this.Departments.map(d => new Department(d));
   }
 
+  /**
+   * Convert object to Realtime object
+   * Only new element are out
+   * @return {any}
+   */
   public ToRealTimeObject(): any {
-
     return {
       uuid: this.Uuid,
       name: this.Name,
