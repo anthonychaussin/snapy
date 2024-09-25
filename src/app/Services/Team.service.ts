@@ -9,13 +9,15 @@ import {IFirebaseService} from './IFirebase.service';
             })
 export class TeamService extends FirebaseService implements IFirebaseService<Team> {
 
+  /**
+   * Constructor
+   */
   constructor() {super(); }
 
   /**
-   * Delete a Department
-   * @return {boolean}
-   * @constructor
-   * @param teams
+   * Delete all {@link Team}
+   * @param {Team[]} teams array of {@link Team} to delete
+   * @return {Promise<boolean>} true if succeed, else false
    */
   async Delete(teams: Team[]): Promise<boolean> {
     try {
@@ -29,6 +31,12 @@ export class TeamService extends FirebaseService implements IFirebaseService<Tea
     }
   }
 
+  /**
+   * Get a {@link Team}
+   * @param {string} basePath Base path of {@link Team} with his parents ids
+   * @param {string} uuid Uuid of {@link Team} to fetch
+   * @return {Promise<Team | void>} return {@link Team}, void if not found
+   */
   async Get(basePath: string, uuid: string): Promise<Team | void> {
     try {
       return await this.RealTimeGet<Team>(Team, basePath, uuid).catch((e) => {
@@ -44,10 +52,21 @@ export class TeamService extends FirebaseService implements IFirebaseService<Tea
     }
   }
 
+  /**
+   * Get all {@link Team}
+   * @param {string} basePath Base path of {@link Team} with parents ids
+   * @param {string[]} uuid Array of {@link Team} Uuids to fetch
+   * @return {Promise<(Team | void)[]>} return {@link Team}, void if not found
+   */
   async GetAll(basePath: string, uuid: string[]): Promise<(Team | void)[]> {
     return Promise.all(uuid.map(u => this.Get(basePath, u)));
   }
 
+  /**
+   * Create new {@link Team}
+   * @param {Team[]} object Array {@link Team} to create
+   * @return {Promise<Team[]>} return {@link Team} with there Uuid
+   */
   async Save(object: Team[]): Promise<Team[]> {
     try {
       return await this.RealTimeCreate<Team>(object);
@@ -59,6 +78,11 @@ export class TeamService extends FirebaseService implements IFirebaseService<Tea
     }
   }
 
+  /**
+   * Update the {@link Team} (only new data are inserted)
+   * @param {Team[]} object Array {@link Team} to update
+   * @return {Promise<boolean>} true if {@link Team} are updated
+   */
   async Update(object: Team[]): Promise<boolean> {
     try {
       await this.RealTimeUpdate<Team>(object);
