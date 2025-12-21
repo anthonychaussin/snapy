@@ -17,8 +17,12 @@
         <p class="dashboard__metric">{{ companyCount() }} entreprises</p>
         <p>Groupes et droits partagés avec votre organisation.</p>
         <ul>
-          <li *ngFor="let company of topCompanies()">{{ company.Name || 'Entreprise sans nom' }}</li>
-          <li *ngIf="!topCompanies().length">Aucune entreprise chargée pour le moment.</li>
+          @for (company of topCompanies(); track company.Uuid) {
+            <li>{{ company.Name || 'Entreprise sans nom' }}</li>
+          }
+          @if (!topCompanies().length) {
+            <li>Aucune entreprise chargée pour le moment.</li>
+          }
         </ul>
       </article>
 
@@ -27,10 +31,14 @@
         <p class="dashboard__metric">{{ missionCount() }} missions</p>
         <p>Suivi de {{ projectCount() }} projets connectés.</p>
         <ul>
-          <li *ngFor="let mission of recentMissions()">
-            {{ mission.Name || 'Mission sans intitulé' }}
-          </li>
-          <li *ngIf="!recentMissions().length">Démarrez une mission pour qu'elle apparaisse ici.</li>
+          @for (mission of recentMissions(); track mission.Uuid) {
+            <li>
+              {{ mission.Name || 'Mission sans intitulé' }}
+            </li>
+          }
+          @if (!recentMissions().length) {
+            <li>Démarrez une mission pour qu'elle apparaisse ici.</li>
+          }
         </ul>
       </article>
 

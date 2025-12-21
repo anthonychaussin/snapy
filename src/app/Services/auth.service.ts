@@ -1,13 +1,15 @@
 import {Injectable} from '@angular/core';
-import {initializeApp, getApps, getApp} from 'firebase/app';
+import {getApp, getApps, initializeApp} from 'firebase/app';
 import {
   Auth,
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
   User
 } from 'firebase/auth';
 import {environment} from '../../environments/environment';
@@ -36,6 +38,14 @@ export class AuthService {
 
   sendPasswordReset(email: string) {
     return sendPasswordResetEmail(this.auth, email);
+  }
+
+  sendVerificationEmail(user: User) {
+    return sendEmailVerification(user);
+  }
+
+  updateDisplayName(user: User, displayName: string) {
+    return updateProfile(user, {displayName});
   }
 
   getCurrentUser(): User | null {

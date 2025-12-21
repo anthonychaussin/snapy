@@ -1,118 +1,140 @@
-<ion-content class="auth-page__content">
-    <div class="auth-card">
-      <p class="eyebrow">Créer un compte entreprise</p>
-      <h1>Configurez Snapy pour votre organisation</h1>
-      <p class="lead">
-        Connectez vos équipes, préparez vos premiers rapports et invitez vos partenaires en quelques minutes.
-      </p>
+<ion-content>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title>Créer un compte</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-      <section class="confirmation-panel" *ngIf="registrationState === 'success'">
-        <p class="confirmation-panel__title">Demande envoyée</p>
-        <p class="confirmation-panel__message">{{ successMessage }}</p>
-        <p class="confirmation-panel__time" *ngIf="lastSubmittedAt">
-          Dernière soumission : {{ lastSubmittedAt | date: 'short' }}
-        </p>
-        <div class="confirmation-panel__actions">
-          <ion-button
-            class="cta secondary"
-            type="button"
-            (click)="resend()"
-            [disabled]="isProcessing"
-          >
-            <span *ngIf="!isProcessing">Renvoyer la demande</span>
-            <span *ngIf="isProcessing">En cours...</span>
-          </ion-button>
-          <ion-button class="cta primary" type="button" (click)="goToDashboard()">
-            Accéder au tableau de bord
-          </ion-button>
-        </div>
-        <p class="confirmation-panel__note" *ngIf="resendCount">
-          Renvoyée {{ resendCount }} fois depuis cette session.
-        </p>
-      </section>
+  <ion-grid class="ion-padding">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-md="10" size-lg="7">
+        <ion-card>
+          <ion-card-header>
+            <ion-badge color="primary">Entreprise</ion-badge>
+            <ion-card-title>Créer un compte entreprise</ion-card-title>
+            <ion-card-subtitle>Configurez Snapy pour votre organisation</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text color="medium">
+              Connectez vos équipes, préparez vos premiers rapports et invitez vos partenaires en quelques minutes.
+            </ion-text>
 
-      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-        <label class="field">
-          <span>Nom de l'entreprise</span>
-          <ion-input
-            type="text"
-            formControlName="companyName"
-            placeholder="Nom de la société"
-          ></ion-input>
-          <small *ngIf="form.get('companyName')?.touched && form.get('companyName')?.invalid">
-            Ce champ est requis.
-          </small>
-        </label>
-
-        <label class="field">
-          <span>Email de contact</span>
-          <ion-input
-            type="email"
-            formControlName="email"
-            placeholder="operations@entreprise.com"
-            autocomplete="email"
-          ></ion-input>
-          <small *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
-            Merci d'utiliser une adresse email valide.
-          </small>
-        </label>
-
-        <div class="password-row">
-          <label class="field">
-            <span>Mot de passe</span>
-            <ion-input
-              type="password"
-              formControlName="password"
-              placeholder="••••••••"
-              autocomplete="new-password"
-            ></ion-input>
-            <small *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
-              Un mot de passe est requis.
-            </small>
-          </label>
-
-          <label class="field">
-            <span>Confirmer</span>
-            <ion-input
-              type="password"
-              formControlName="confirmPassword"
-              placeholder="••••••••"
-              autocomplete="new-password"
-            ></ion-input>
-            <small
-              *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid"
+            <form
+              *ngIf="registrationState !== 'success'"
+              [formGroup]="form"
+              (ngSubmit)="submit()"
+              novalidate
             >
-              Ce champ est requis.
-            </small>
-          </label>
-        </div>
+              <ion-list lines="full">
+                <ion-item>
+                  <ion-label position="stacked">Nom de l'entreprise</ion-label>
+                  <ion-input type="text" formControlName="companyName" placeholder="Nom de la société"></ion-input>
+                  @if (form.get('companyName')?.touched && form.get('companyName')?.invalid) {
+                    <ion-note slot="helper" color="danger">Ce champ est requis.</ion-note>
+                  }
+                </ion-item>
 
-        <label class="field">
-          <span>Téléphone de contact (optionnel)</span>
-          <ion-input type="tel" formControlName="contactPhone" placeholder="+33 1 23 45 67 89"></ion-input>
-        </label>
+                <ion-item>
+                  <ion-label position="stacked">Email de contact</ion-label>
+                  <ion-input
+                    type="email"
+                    formControlName="email"
+                    placeholder="operations@entreprise.com"
+                    autocomplete="email"
+                  ></ion-input>
+                  @if (form.get('email')?.touched && form.get('email')?.invalid) {
+                    <ion-note slot="helper" color="danger">Merci d'utiliser une adresse email valide.</ion-note>
+                  }
+                </ion-item>
 
-        <p class="mismatch" *ngIf="passwordMismatch">
-          Les mots de passe ne correspondent pas.
-        </p>
+                <ion-row>
+                  <ion-col size="12" size-md="6">
+                    <ion-item>
+                      <ion-label position="stacked">Mot de passe</ion-label>
+                      <ion-input
+                        type="password"
+                        formControlName="password"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                      ></ion-input>
+                      @if (form.get('password')?.touched && form.get('password')?.invalid) {
+                        <ion-note slot="helper" color="danger">Un mot de passe est requis.</ion-note>
+                      }
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="12" size-md="6">
+                    <ion-item>
+                      <ion-label position="stacked">Confirmer</ion-label>
+                      <ion-input
+                        type="password"
+                        formControlName="confirmPassword"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                      ></ion-input>
+                      @if (form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid) {
+                        <ion-note slot="helper" color="danger">Ce champ est requis.</ion-note>
+                      }
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-list>
 
-        <ion-button class="form-action primary" type="submit" [disabled]="isProcessing">
-          <span *ngIf="!isProcessing">Enregistrer une entreprise</span>
-          <span *ngIf="isProcessing">Création en cours...</span>
-        </ion-button>
-      </form>
+              @if (passwordMismatch) {
+                <ion-text color="danger" class="ion-padding-start">
+                  Les mots de passe ne correspondent pas.
+                </ion-text>
+              }
 
-      <p class="error-message" *ngIf="error()">{{ error() }}</p>
-      <p
-        class="error-message"
-        *ngIf="registrationState === 'error' && !error()"
-      >
-        Nous n'avons pas pu enregistrer la demande, merci de réessayer.
-      </p>
+              <ion-button expand="block" type="submit" [disabled]="isProcessing">
+                @if (!isProcessing) {
+                  <span>Enregistrer l'entreprise</span>
+                }
+                @if (isProcessing) {
+                  <span>Création en cours...</span>
+                }
+              </ion-button>
+            </form>
 
-      <footer class="auth-footer">
-        <p>Déjà membre ?</p>
-        <a routerLink="/login">Se connecter</a>
-      </footer>
-    </div>
-  </ion-content>
+            @if (error()) {
+              <ion-text color="danger" class="ion-padding-start">
+                {{ error() }}
+              </ion-text>
+            }
+            @if (registrationState === 'error' && !error()) {
+              <ion-text color="danger" class="ion-padding-start">
+                Nous n'avons pas pu créer le compte, merci de réessayer.
+              </ion-text>
+            }
+
+            @if (registrationState === 'success') {
+              <ion-card color="success" class="ion-margin-top">
+                <ion-card-header>
+                  <ion-card-title>Confirmation requise</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-text color="light">{{ successMessage }}</ion-text>
+                  <ion-button expand="block" class="ion-margin-top" fill="outline" color="light" (click)="goToLogin()">
+                    Se connecter
+                  </ion-button>
+                </ion-card-content>
+              </ion-card>
+            }
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="ion-margin-top">
+          <ion-card-content>
+            <ion-row class="ion-align-items-center ion-justify-content-between">
+              <ion-col>
+                <ion-text color="medium">Déjà membre ?</ion-text>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-button routerLink="/login" fill="outline" size="small">Se connecter</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,14 +1,33 @@
 import {Routes} from '@angular/router';
-import {LandingComponent} from './pages/landing/landing.component';
-import {LoginComponent} from './pages/login/login.component';
-import {RegisterCompanyComponent} from './pages/register-company/register-company.component';
-import {DashboardComponent} from './pages/dashboard/dashboard.component';
-import {AuthGuard} from './guards/auth.guard';
+import {authGuard} from './guards/auth.guard';
 
 export const routes: Routes = [
-  {path: '', component: LandingComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'register-company', component: RegisterCompanyComponent},
-  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  {
+    path: '',
+    loadComponent: () =>
+      import('./pages/landing/landing.component').then((m) => m.LandingComponent)
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/login.component').then((m) => m.LoginComponent)
+  },
+  {
+    path: 'register-company',
+    loadComponent: () =>
+      import('./pages/register-company/register-company.component').then((m) => m.RegisterCompanyComponent)
+  },
+  {
+    path: 'onboarding',
+    loadComponent: () =>
+      import('./pages/onboarding/onboarding.component').then((m) => m.OnboardingComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    canActivate: [authGuard]
+  },
   {path: '**', redirectTo: '', pathMatch: 'full'}
 ];

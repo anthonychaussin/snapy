@@ -9,6 +9,7 @@ import {TaskStore} from '../../Stores/task.store';
 
 @Component({
              selector: 'snap-dashboard-page',
+             standalone: true,
              imports: [CommonModule, IonContent, IonButton],
              templateUrl: './dashboard.component.html',
              styleUrls: ['./dashboard.component.scss']
@@ -33,4 +34,5 @@ export class DashboardComponent {
     await this.router.navigateByUrl('/login');
   }
 
+  protected readonly caches = caches;
 }

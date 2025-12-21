@@ -1,106 +1,165 @@
-<ion-content fullscreen class="landing-page__content">
-    <main class="landing">
-      <section class="hero">
-        <div class="hero__text">
-          <p class="hero__eyebrow">Snapy • Intelligence terrain</p>
-          <h1>
-            Reprenez le contrôle des opérations sur le terrain en quelques minutes.
-          </h1>
-          <p class="hero__lead">
-            Centralisez les rapports, planifiez les interventions et partagez des mises à jour fiables
-            avec toute votre équipe avant même d’être connecté.
-          </p>
-          <ul class="hero__list">
-            <li>Suivi en temps réel des missions et des ressources humaines.</li>
-            <li>Rapports automatisés exportables pour la direction.</li>
-            <li>Une seule source de vérité pour les équipes et les partenaires.</li>
-          </ul>
-          <div class="hero__actions">
-            <ion-button class="cta primary" routerLink="/login" size="default">
-              Se connecter
-            </ion-button>
-            <ion-button class="cta secondary" routerLink="/register-company" fill="outline">
-              Enregistrer une entreprise
-            </ion-button>
-          </div>
-        </div>
-        <div class="hero__card">
-          <p class="hero__card-label">Aperçu sans connexion</p>
-          <div class="hero__card-metrics">
-            <div>
-              <p class="metric-value">92 %</p>
-              <p class="metric-label">Conformité des interventions</p>
-            </div>
-            <div>
-              <p class="metric-value">15 min</p>
-              <p class="metric-label">Temps moyen de relecture</p>
-            </div>
-          </div>
-          <div class="hero__card-progress">
-            <span></span>
-            <span class="progress-track"></span>
-          </div>
-          <p class="hero__card-note">
-            Gérez toutes vos entreprises, équipes et documents sans effort dès votre première visite.
-          </p>
-        </div>
-      </section>
+<ion-content fullscreen>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title>Snapy</ion-title>
+      <ion-buttons slot="end">
+        <ion-button routerLink="/login" fill="clear">Connexion</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
-      <section class="insight-strip">
-        <div>
-          <p class="insight-label">Déploiement rapide</p>
-          <p class="insight-value">moins de 5 minutes</p>
-        </div>
-        <div>
-          <p class="insight-label">Support opérationnel</p>
-          <p class="insight-value">priorité 24h</p>
-        </div>
-        <div>
-          <p class="insight-label">Sécurité</p>
-          <p class="insight-value">stockage européen</p>
-        </div>
-      </section>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-badge color="tertiary">Terrain 2.0</ion-badge>
+            <ion-card-title>Snapy • Intelligence terrain</ion-card-title>
+            <ion-card-subtitle>Reprenez le contrôle des opérations terrain en quelques minutes.</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text color="medium">
+              Centralisez les rapports, planifiez les interventions et partagez des mises à jour fiables avec vos équipes avant même d’être connecté.
+            </ion-text>
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="pulse-outline"></ion-icon>
+                <ion-label>Suivi en temps réel des missions et des ressources humaines.</ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="document-text-outline"></ion-icon>
+                <ion-label>Rapports automatisés exportables pour la direction.</ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="people-outline"></ion-icon>
+                <ion-label>Une seule source de vérité pour vos équipes et partenaires.</ion-label>
+              </ion-item>
+            </ion-list>
+            <ion-row>
+              <ion-col size="auto">
+                <ion-button expand="block" routerLink="/login">Se connecter</ion-button>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-button expand="block" routerLink="/register-company" fill="outline">Enregistrer une entreprise</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="6">
+        <ion-card color="primary">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-text color="light">Aperçu instantané</ion-text>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-row>
+              <ion-col>
+                <ion-text color="light">
+                  <h2>92%</h2>
+                </ion-text>
+                <ion-text color="light">Conformité des interventions</ion-text>
+              </ion-col>
+              <ion-col>
+                <ion-text color="light">
+                  <h2>15 min</h2>
+                </ion-text>
+                <ion-text color="light">Temps moyen de relecture</ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-progress-bar value="0.8" color="light"></ion-progress-bar>
+            <ion-text color="light">
+              Gérez toutes vos entreprises, équipes et documents sans effort dès votre première visite.
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
 
-      <section class="feature-section">
-        <article class="feature-card">
-          <h3>Planifiez vos équipes</h3>
-          <p>
-            Créez des plans de tournées, répartissez les tâches et envoyez des notifications à vos
-            collaborateurs sans multiplier les outils.
-          </p>
-        </article>
-        <article class="feature-card">
-          <h3>Partagez des rapports clairs</h3>
-          <p>
-            Transformez les photos et notes de terrain en tableaux de bord compréhensibles en un clic.
-          </p>
-        </article>
-        <article class="feature-card">
-          <h3>Orchestrez vos partenaires</h3>
-          <p>
-            Donnez un accès adapté à vos prestataires pour suivre les KPI, valider les contrats et
-            facturer avec plus de transparence.
-          </p>
-        </article>
-      </section>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Déploiement & sécurité</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="6">
+                <ion-text color="primary">Déploiement rapide</ion-text>
+                <ion-text>moins de 5 minutes</ion-text>
+              </ion-col>
+              <ion-col size="6">
+                <ion-text color="primary">Sécurité</ion-text>
+                <ion-text>Stockage européen</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
 
-      <section class="final-cta">
-        <div>
-          <p class="final-cta__eyebrow">Créer son compte</p>
-          <h2>Choisissez votre version</h2>
-          <p>
-            Une fois connecté, vous pouvez piloter plusieurs entreprises, gérer les utilisateurs et
-            accéder aux tableaux de bord partagés avec vos équipes.
-          </p>
-        </div>
-        <div class="final-cta__actions">
-          <ion-button class="cta primary" routerLink="/login" size="default">
-            Accéder à mon espace
-          </ion-button>
-          <ion-button class="cta secondary" routerLink="/register-company" fill="outline">
-            Enregistrer une entreprise
-          </ion-button>
-        </div>
-      </section>
-    </main>
-  </ion-content>
+    <ion-row>
+      <ion-col size="12" size-md="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Planifiez vos équipes</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text>
+              Créez des tours, répartissez les tâches et envoyez des notifications à vos collaborateurs depuis un seul tableau de bord.
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Partagez des rapports clairs</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text>
+              Transformez les photos et notes de terrain en tableaux de bord compréhensibles en un clic.
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Orchestrez vos partenaires</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text>
+              Donnez un accès adapté à vos prestataires pour suivre les KPI, valider des contrats et facturer avec transparence.
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" size-md="8">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Créer son compte</ion-card-title>
+            <ion-card-subtitle>Choisissez votre version</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text>
+              Une fois connecté, pilotez plusieurs entreprises, gérez les utilisateurs et accédez aux tableaux de bord partagés avec vos équipes.
+            </ion-text>
+            <ion-row>
+              <ion-col size="auto">
+                <ion-button expand="block" routerLink="/login">Accéder à mon espace</ion-button>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-button expand="block" routerLink="/register-company" fill="outline">Enregistrer une entreprise</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
