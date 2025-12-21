@@ -34,6 +34,19 @@ export class OnboardingService extends FirebaseService {
     });
   }
 
+  async updateProfile(payload: Partial<Omit<CompanyProfilePayload, 'ownerUid'>> & {ownerUid: string}): Promise<void> {
+    const documentRef = doc(this.FireStore, this.collectionName, payload.ownerUid);
+    await setDoc(
+      documentRef,
+      {
+        ...payload,
+        onboardingCompleted: true,
+        updatedAt: serverTimestamp()
+      },
+      {merge: true}
+    );
+  }
+
   async hasProfile(uid: string): Promise<boolean> {
     try {
       const snapshot = await getDoc(doc(this.FireStore, this.collectionName, uid));

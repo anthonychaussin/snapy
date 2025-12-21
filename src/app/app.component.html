@@ -1,3 +1,26 @@
 <ion-app (contextmenu)="rightCLick($event)" [class.dark-theme]="dark">
+  @if (menuEntries().length > 0) {
+    <ion-menu contentId="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Snapy</ion-title>
+        @if (currentRoleLabel()) {
+          <ion-text>{{ currentRoleLabel() }}</ion-text>
+        }
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle [autoHide]="false" *ngFor="let entry of menuEntries()">
+          <ion-item [routerLink]="entry.route" routerDirection="root">
+            <ion-icon slot="start" [name]="entry.icon"></ion-icon>
+            <ion-label>{{ entry.label }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  }
+
   <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>

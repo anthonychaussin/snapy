@@ -1,6 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router, RouterModule} from '@angular/router';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {
   IonButton,
   IonCard,
@@ -19,6 +19,7 @@ import {
 } from '@ionic/angular/standalone';
 import type {User} from 'firebase/auth';
 import {AuthService} from '../../Services/auth.service';
+import {CompanyMembershipService} from '../../Services/company-membership.service';
 
 @Component({
              selector: 'snap-waiting',
@@ -47,15 +48,19 @@ import {AuthService} from '../../Services/auth.service';
 export class WaitingComponent implements OnInit, OnDestroy {
   userEmail = 'votre adresse e-mail';
   errorMessage?: string;
+  private pendingInviteId?: string;
 
   private intervalId?: number;
 
   constructor(
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly membershipService: CompanyMembershipService
   ) {}
 
   async ngOnInit() {
+    this.pendingInviteId = this.route.snapshot.queryParamMap.get('inviteId') ?? undefined;
     const user = await this.waitForSignedInUser();
     if (!user) {
       void this.router.navigateByUrl('/login');
@@ -114,6 +119,15 @@ export class WaitingComponent implements OnInit, OnDestroy {
 
     if (verifiedUser?.emailVerified) {
       this.stopPolling();
+      try {
+        await this.membershipService.activateInvite(
+          this.pendingInviteId ?? null,
+          verifiedUser.uid,
+          verifiedUser.email ?? undefined
+        );
+      } catch {
+        // ignore membership errors; allow navigation regardless
+      }
       void this.router.navigateByUrl('/dashboard');
     }
   }

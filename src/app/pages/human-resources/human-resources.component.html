@@ -1,0 +1,278 @@
+<ion-content>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Ressources Humaines</ion-title>
+      <ion-text>Espaces reserves aux RH et aux administrateurs</ion-text>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Equipe RH</ion-card-title>
+            <ion-card-subtitle>Vision rapide des invitations et collaborateurs</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" sizeMd="4">
+                  <ion-text>Effectif suivi</ion-text>
+                  <ion-text color="primary">{{ totalMembers() }}</ion-text>
+                </ion-col>
+                <ion-col size="12" sizeMd="4">
+                  <ion-text>Membres actifs</ion-text>
+                  <ion-text color="success">{{ activeMembers().length }}</ion-text>
+                </ion-col>
+                <ion-col size="12" sizeMd="4">
+                  <ion-text>Invitations en cours</ion-text>
+                  <ion-text color="warning">{{ pendingInvites().length }}</ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" sizeLg="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Inviter un collaborateur</ion-card-title>
+            <ion-card-subtitle>Ajoutez un employe et attribuez un role</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="inviteForm" (ngSubmit)="inviteEmployee()">
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-label position="stacked">Email professionnel</ion-label>
+                  <ion-input formControlName="email" type="email" placeholder="prenom.nom@entreprise.com"></ion-input>
+                </ion-item>
+                <ion-item>
+                <ion-label position="stacked">Role</ion-label>
+                  <ion-select formControlName="role" interface="popover">
+                    @for (option of roleOptions; track option.value) {
+                      <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+                    }
+                  </ion-select>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-button type="submit" expand="block" [disabled]="inviteProcessing">Inviter</ion-button>
+                </ion-item>
+              </ion-list>
+            </form>
+            @if (inviteMessage) {
+              <ion-text color="success">{{ inviteMessage }}</ion-text>
+            }
+            @if (inviteError) {
+              <ion-text color="danger">{{ inviteError }}</ion-text>
+            }
+            @if (pendingInvites().length) {
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Invitations en attente</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-list lines="none">
+                    @for (invite of pendingInvites(); track invite.id) {
+                      <ion-item>
+                        <ion-label>
+                      <ion-text>{{ invite.email }}</ion-text>
+                      <ion-text>{{ getRoleLabel(invite.role) }}</ion-text>
+                        </ion-label>
+                      </ion-item>
+                    }
+                  </ion-list>
+                </ion-card-content>
+              </ion-card>
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" sizeLg="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Tableau des collaborateurs</ion-card-title>
+            <ion-card-subtitle>Suivi des roles, teletravail et heures prevues</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" sizeMd="3">
+                  <ion-text>Nom / Email</ion-text>
+                </ion-col>
+                <ion-col size="12" sizeMd="2">
+                  <ion-text>Role</ion-text>
+                </ion-col>
+                <ion-col size="12" sizeMd="3">
+                  <ion-text>Teletravail</ion-text>
+                </ion-col>
+                <ion-col size="12" sizeMd="2">
+                  <ion-text>Charge</ion-text>
+                </ion-col>
+                <ion-col size="12" sizeMd="2">
+                  <ion-text>Actions</ion-text>
+                </ion-col>
+              </ion-row>
+              @for (member of activeMembers(); track member.id) {
+                <ion-row>
+                  <ion-col size="12" sizeMd="3">
+                    <ion-text>{{ member.email }}</ion-text>
+                    <ion-text>
+                      @if (member.role) {
+                        {{ getRoleLabel(member.role) }}
+                      } @else {
+
+Collaborateur
+
+                      }
+                    </ion-text>
+                  </ion-col>
+                  <ion-col size="12" sizeMd="2">
+                    <ion-select
+                      [value]="member.role"
+                      interface="popover"
+                      (ionChange)="updateMemberRole(member, $event.detail.value)"
+                    >
+                      @for (option of roleOptions; track option.value) {
+                        <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+                      }
+                    </ion-select>
+                  </ion-col>
+                  <ion-col size="12" sizeMd="3">
+                    <ion-text>
+                      Teletravail : {{ getSettings(member).teleworkDays.join(', ') }}
+                    </ion-text>
+                    <ion-text>
+                      Jours : {{ getSettings(member).workingDays.join(', ') }}
+                    </ion-text>
+                  </ion-col>
+                  <ion-col size="12" sizeMd="2">
+                    <ion-progress-bar [value]="getProgressValue(member)"></ion-progress-bar>
+                    <ion-text>{{ getPercentage(member) }} %</ion-text>
+                  </ion-col>
+                  <ion-col size="12" sizeMd="2">
+                    <ion-button expand="block" fill="outline" color="danger" (click)="removeMember(member)">
+                      Supprimer
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              }
+              @if (!activeMembers().length) {
+                <ion-row>
+                  <ion-col>
+                    <ion-text>Aucun membre actif pour l'instant.</ion-text>
+                  </ion-col>
+                </ion-row>
+              }
+            </ion-grid>
+            @if (actionMessage) {
+              <ion-text color="success">{{ actionMessage }}</ion-text>
+            }
+            @if (actionError) {
+              <ion-text color="danger">{{ actionError }}</ion-text>
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Fiche administrative avancee</ion-card-title>
+            <ion-card-subtitle>Parametres horaires, salaires et teletravail</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            @if (selectedMember()) {
+              <ion-item>
+                <ion-label position="stacked">Collaborateur</ion-label>
+                <ion-select [value]="selectedMember()?.id" interface="popover" (ionChange)="selectMember($event.detail.value)">
+                  @for (member of activeMembers(); track member.id) {
+                    <ion-select-option [value]="member.id">{{ member.email }}</ion-select-option>
+                  }
+                </ion-select>
+              </ion-item>
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-label position="stacked">Taux horaire (EUR)</ion-label>
+                  <ion-input
+                    type="number"
+                    [value]="selectedSettings()?.hourlyRate ?? 0"
+                    (ionInput)="updateNumericSetting(selectedMember()?.id ?? '', 'hourlyRate', $event.detail.value!)"
+                  ></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Objectif hebdomadaire (h)</ion-label>
+                  <ion-input
+                    type="number"
+                    [value]="selectedSettings()?.weeklyTargetHours ?? 0"
+                    (ionInput)="updateNumericSetting(selectedMember()?.id ?? '', 'weeklyTargetHours', $event.detail.value!)"
+                  ></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Heures pointees cette semaine</ion-label>
+                  <ion-input
+                    type="number"
+                    [value]="selectedSettings()?.loggedHours ?? 0"
+                    (ionInput)="updateNumericSetting(selectedMember()?.id ?? '', 'loggedHours', $event.detail.value!)"
+                  ></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Jours de teletravail</ion-label>
+                  <ion-select
+                    [value]="selectedSettings()?.teleworkDays"
+                    multiple
+                    interface="popover"
+                    (ionChange)="updateArraySetting(selectedMember()?.id ?? '', 'teleworkDays', $event.detail.value!)">
+                    @for (day of dayOptions; track day.value) {
+                      <ion-select-option [value]="day.value">{{ day.label }}</ion-select-option>
+                    }
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Jours presents au bureau</ion-label>
+                  <ion-select
+                    [value]="selectedSettings()?.workingDays"
+                    multiple
+                    interface="popover"
+                    (ionChange)="updateArraySetting(selectedMember()?.id ?? '', 'workingDays', $event.detail.value)">
+                    @for (day of dayOptions; track day.value) {
+                      <ion-select-option [value]="day.value">{{ day.label }}</ion-select-option>
+                    }
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="stacked">Notes administratives</ion-label>
+                  <ion-textarea
+                    rows="3"
+                    [value]="selectedSettings()?.notes"
+                    (ionInput)="updateSetting(selectedMember()?.id ?? '', {notes: $event.detail.value ?? ''})"
+                  ></ion-textarea>
+                </ion-item>
+              </ion-list>
+              <ion-item lines="none">
+                <ion-progress-bar [value]="selectedProgressValue()"></ion-progress-bar>
+                <ion-text>{{ selectedProgressPercent() }} % de l'objectif</ion-text>
+              </ion-item>
+              <ion-row>
+                <ion-col size="6">
+                  <ion-button expand="block" fill="outline" (click)="resetSettings(selectedMember())">Reinitialiser</ion-button>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-button expand="block" color="success">Enregistrer</ion-button>
+                </ion-col>
+              </ion-row>
+            } @else {
+              <ion-text>Aucun membre a afficher pour le moment.</ion-text>
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
