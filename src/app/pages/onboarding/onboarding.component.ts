@@ -114,7 +114,7 @@ export class OnboardingComponent {
                                                  officeLocation: this.form.get('officeLocation')?.value ?? undefined,
                                                  description: this.form.get('description')?.value ?? undefined
                                                });
-      await this.router.navigateByUrl('/dashboard');
+      await this.router.navigateByUrl('/app/dashboard');
     } catch {
       this.state = 'error';
     }

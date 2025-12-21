@@ -102,7 +102,7 @@ export class LoginComponent {
       }
 
       const isOnboarded = await this.onboardingService.hasProfile(user.uid);
-      const targetRoute = isOnboarded ? '/dashboard' : '/onboarding';
+      const targetRoute = isOnboarded ? '/app/dashboard' : '/app/onboarding';
       await this.router.navigateByUrl(targetRoute);
     } catch {
       // Error surfaced via store signal; no additional logic needed.

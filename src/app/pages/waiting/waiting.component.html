@@ -12,15 +12,17 @@
           <ion-card-header>
             <ion-card-title>Vérification du compte</ion-card-title>
           </ion-card-header>
-          <ion-card-content class="waiting-card">
-            <ion-spinner name="crescent" class="waiting-spinner"></ion-spinner>
-            <ion-text color="medium">
-              Un e-mail de confirmation a été envoyé à <strong>{{ userEmail }}</strong>. Merci de cliquer sur le lien puis de revenir ici : nous détectons automatiquement la vérification.
+          <ion-card-content class="ion-text-center">
+            <div class="ion-margin-vertical">
+              <ion-spinner name="crescent" style="font-size: 2.5rem;"></ion-spinner>
+            </div>
+            <ion-text color="medium" class="ion-margin-vertical">
+              <p>Un e-mail de confirmation a été envoyé à <strong>{{ userEmail }}</strong>. Merci de cliquer sur le lien puis de revenir ici : nous détectons automatiquement la vérification.</p>
             </ion-text>
-            <ion-text *ngIf="errorMessage" color="danger">
-              {{ errorMessage }}
+            <ion-text *ngIf="errorMessage" color="danger" class="ion-margin-vertical">
+              <p>{{ errorMessage }}</p>
             </ion-text>
-            <ion-button expand="block" fill="clear" (click)="manualRefresh()">Vérifier maintenant</ion-button>
+            <ion-button expand="block" fill="clear" (click)="manualRefresh()" class="ion-margin-top">Vérifier maintenant</ion-button>
             <ion-button expand="block" class="ion-margin-top" (click)="goToLanding()">Retourner à la landing page</ion-button>
           </ion-card-content>
         </ion-card>

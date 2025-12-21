@@ -26,26 +26,26 @@ export const authGuard: CanActivateFn = async (_route, state: RouterStateSnapsho
   const membership = hasProfile ? undefined : await membershipService.findMembershipByEmployee(user.uid);
   const hasMembership = hasProfile || !!membership;
   const normalizedUrl = state.url ?? '';
-  const isOnboardingRoute = normalizedUrl.startsWith('/onboarding');
-  const isDashboardRoute = normalizedUrl.startsWith('/dashboard');
-  const isHrRoute = normalizedUrl.startsWith('/ressources-humaines');
+  const isOnboardingRoute = normalizedUrl.startsWith('/app/onboarding');
+  const isDashboardRoute = normalizedUrl.startsWith('/app/dashboard');
+  const isHrRoute = normalizedUrl.startsWith('/app/ressources-humaines');
   const userRole = hasProfile ? RoleType.ADMIN : (membership?.role ?? RoleType.EMPLOYEE);
   const isHrOrAdmin = userRole === RoleType.HR || userRole === RoleType.ADMIN;
 
   if (isOnboardingRoute && (hasProfile || hasMembership)) {
-    return router.createUrlTree(['/dashboard']);
+    return router.createUrlTree(['/app/dashboard']);
   }
 
   if (!isOnboardingRoute && !(hasProfile || hasMembership)) {
-    return router.createUrlTree(['/onboarding']);
+    return router.createUrlTree(['/app/onboarding']);
   }
 
   if (isHrRoute && !isHrOrAdmin) {
-    return router.createUrlTree(['/dashboard']);
+    return router.createUrlTree(['/app/dashboard']);
   }
 
   if (isDashboardRoute && isHrOrAdmin) {
-    return router.createUrlTree(['/ressources-humaines']);
+    return router.createUrlTree(['/app/ressources-humaines']);
   }
 
   return true;

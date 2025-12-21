@@ -42,8 +42,7 @@ import {CompanyMembershipService} from '../../Services/company-membership.servic
                IonButton,
                IonSpinner
              ],
-             templateUrl: './waiting.component.html',
-             styleUrls: ['./waiting.component.scss']
+             templateUrl: './waiting.component.html'
            })
 export class WaitingComponent implements OnInit, OnDestroy {
   userEmail = 'votre adresse e-mail';
@@ -128,7 +127,7 @@ export class WaitingComponent implements OnInit, OnDestroy {
       } catch {
         // ignore membership errors; allow navigation regardless
       }
-      void this.router.navigateByUrl('/dashboard');
+      void this.router.navigateByUrl('/app/dashboard');
     }
   }
 

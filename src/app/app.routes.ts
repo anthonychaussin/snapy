@@ -27,40 +27,47 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/waiting/waiting.component').then((m) => m.WaitingComponent)
   },
   {
-    path: 'onboarding',
+    path: 'app',
     loadComponent: () =>
-      import('./pages/onboarding/onboarding.component').then((m) => m.OnboardingComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'dashboard',
-    loadComponent: () =>
-      import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'ressources-humaines',
-    loadComponent: () =>
-      import('./pages/human-resources/human-resources.component').then((m) => m.HumanResourcesComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'gestion-manager',
-    loadComponent: () =>
-      import('./pages/gestion-manager/gestion-manager.component').then((m) => m.GestionManagerComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'gestion-projet',
-    loadComponent: () =>
-      import('./pages/gestion-projet/gestion-projet.component').then((m) => m.GestionProjetComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'pointage',
-    loadComponent: () =>
-      import('./pages/pointage/pointage.component').then((m) => m.PointageComponent),
-    canActivate: [authGuard]
+      import('./layouts/authenticated-layout/authenticated-layout.component').then((m) => m.AuthenticatedLayoutComponent),
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'onboarding',
+        loadComponent: () =>
+          import('./pages/onboarding/onboarding.component').then((m) => m.OnboardingComponent)
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent)
+      },
+      {
+        path: 'ressources-humaines',
+        loadComponent: () =>
+          import('./pages/human-resources/human-resources.component').then((m) => m.HumanResourcesComponent)
+      },
+      {
+        path: 'gestion-manager',
+        loadComponent: () =>
+          import('./pages/gestion-manager/gestion-manager.component').then((m) => m.GestionManagerComponent)
+      },
+      {
+        path: 'gestion-projet',
+        loadComponent: () =>
+          import('./pages/gestion-projet/gestion-projet.component').then((m) => m.GestionProjetComponent)
+      },
+      {
+        path: 'pointage',
+        loadComponent: () =>
+          import('./pages/pointage/pointage.component').then((m) => m.PointageComponent)
+      },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      }
+    ]
   },
   {path: '**', redirectTo: '', pathMatch: 'full'}
 ];
