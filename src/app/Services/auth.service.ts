@@ -52,6 +52,14 @@ export class AuthService {
     return this.auth.currentUser;
   }
 
+  async reloadCurrentUser() {
+    const user = this.getCurrentUser();
+    if (!user) {
+      return Promise.reject(new Error('Utilisateur non authentifié.'));
+    }
+    return user.reload();
+  }
+
   observeAuthState(listener: (user: User | null) => void) {
     return onAuthStateChanged(this.auth, listener);
   }

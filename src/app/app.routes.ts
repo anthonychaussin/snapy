@@ -18,6 +18,10 @@ export const routes: Routes = [
       import('./pages/register-company/register-company.component').then((m) => m.RegisterCompanyComponent)
   },
   {
+    path: 'waiting',
+    loadComponent: () => import('./pages/waiting/waiting.component').then((m) => m.WaitingComponent)
+  },
+  {
     path: 'onboarding',
     loadComponent: () =>
       import('./pages/onboarding/onboarding.component').then((m) => m.OnboardingComponent),

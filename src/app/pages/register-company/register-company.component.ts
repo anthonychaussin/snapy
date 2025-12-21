@@ -2,6 +2,7 @@ import {CommonModule} from '@angular/common';
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterModule} from '@angular/router';
+import {AlertController} from '@ionic/angular';
 import {
   IonBadge,
   IonButton,
@@ -68,7 +69,8 @@ export class RegisterCompanyComponent {
     private readonly fb: FormBuilder,
     private readonly authStore: AuthStore,
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly alertController: AlertController
   ) {
     this.form = this.fb.group({
                                 companyName: ['', Validators.required],
@@ -116,6 +118,7 @@ export class RegisterCompanyComponent {
       this.successMessage =
         'Votre compte est créé, un e-mail de confirmation vient de vous être envoyé. Merci de vérifier votre boîte mail avant de vous connecter.';
       this.registrationState = 'success';
+      await this.presentVerificationAlert(email ?? '');
     } catch {
       this.registrationState = 'error';
     }
@@ -123,5 +126,34 @@ export class RegisterCompanyComponent {
 
   goToLogin() {
     void this.router.navigateByUrl('/login');
+  }
+
+  goToWaiting() {
+    void this.router.navigateByUrl('/waiting');
+  }
+
+  private async presentVerificationAlert(email: string) {
+    const alert = await this.alertController.create({
+                                                      header: 'Confirmez votre adresse e-mail',
+                                                      message: `Un e-mail de confirmation vient d'être envoyé à ${email || 'votre adresse e-mail'}. Merci de cliquer sur le lien avant d'accéder à l'application.`,
+                                                      backdropDismiss: false,
+                                                      buttons: [
+                                                        {
+                                                          text: 'Retour à la landing',
+                                                          role: 'cancel',
+                                                          handler: () => {
+                                                            void this.router.navigateByUrl('/');
+                                                          }
+                                                        },
+                                                        {
+                                                          text: 'Aller à la page d\'attente',
+                                                          handler: () => {
+                                                            void this.router.navigateByUrl('/waiting');
+                                                          }
+                                                        }
+                                                      ]
+                                                    });
+
+    await alert.present();
   }
 }

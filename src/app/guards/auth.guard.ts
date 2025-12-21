@@ -1,10 +1,10 @@
 import {inject} from '@angular/core';
 import {CanActivateFn, Router, RouterStateSnapshot} from '@angular/router';
+import {OnboardingService} from '../Services/onboarding.service';
+import {AuthStore} from '../Stores/auth.store';
 
 export const authGuard: CanActivateFn = async (_route, state: RouterStateSnapshot) => {
   const router = inject(Router);
-  const {AuthStore} = await import('../Stores/auth.store');
-  const {OnboardingService} = await import('../Services/onboarding.service');
   const authStore = inject(AuthStore);
   const onboardingService = inject(OnboardingService);
 
