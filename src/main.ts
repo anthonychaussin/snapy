@@ -10,7 +10,8 @@ import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import {AppComponent} from './app/app.component';
 import {routes} from './app/app.routes';
-
+(async () => {
+  const {IonicRouteStrategy, provideIonicAngular} = await import('@ionic/angular/standalone');
 bootstrapApplication(AppComponent, {
   providers: [
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
@@ -26,5 +27,5 @@ bootstrapApplication(AppComponent, {
                                                                  })
                             })
   ]
-})
-  .catch(err => console.error(err));
+});
+})().catch(err => console.error(err));
