@@ -1,17 +1,22 @@
-import {inject, Injectable} from '@angular/core';
-import {child, Database, get, push, ref, set, update} from '@angular/fire/database';
-import {doc, Firestore, getDoc, writeBatch} from '@angular/fire/firestore';
-import {addDoc, collection} from '@angular/fire/firestore/lite';
+import {Injectable} from '@angular/core';
+import {getApp, getApps, initializeApp} from 'firebase/app';
+import {child, Database, get, getDatabase, push, ref, set, update} from 'firebase/database';
+import {addDoc, collection, doc, Firestore, getDoc, getFirestore, writeBatch} from 'firebase/firestore';
+import {environment} from '../../environments/environment';
 import {IBaseObject} from '../Models';
 import {NotFoundException} from '../Models/Exception';
+
+const firebaseApp = getApps().length ? getApp() : initializeApp(environment.FIREBASE_CONFIG);
+const realTimeDatabase = getDatabase(firebaseApp);
+const fireStore = getFirestore(firebaseApp);
 
 @Injectable({
               providedIn: 'root'
             })
 export class FirebaseService {
 
-  protected RealTimeDataBase: Database = inject(Database);
-  protected FireStore: Firestore = inject(Firestore);
+  protected RealTimeDataBase: Database = realTimeDatabase;
+  protected FireStore: Firestore = fireStore;
 
   constructor() { }
 

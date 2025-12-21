@@ -1,27 +1,39 @@
 # Snapy
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.0.
+Snapy est une application de pointage simple conçue pour permettre aux employés de consigner facilement leur temps sur un projet ou un sous-projet, même sans connexion réseau.
 
-## Development server
+## Principe de l'application
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Un employé pointe ou dépointe sur un projet ou, si nécessaire, sur un sous-projet pour indiquer qu'il commence ou arrête de travailler.
+- Si aucun sous-projet n'est défini, le pointage se fait directement sur le projet principal.
+- Le mode hors ligne permet de capturer les pointages même sans connexion, puis de synchroniser automatiquement quand la connexion revient.
+- Les chefs de projet/clients peuvent utiliser ces traces pour améliorer les estimations et détecter les goulots d'étranglement.
+- Les RH accèdent aux remontées d'activité pour suivre la présence et la charge de travail des équipes.
 
-## Code scaffolding
+## Setup basiques
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+1. `npm install` – installe les dépendances du projet.
+2. `ng serve` – lance un serveur de développement sur `http://localhost:4200/`.
 
-## Build
+## Commandes utiles
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- `npm run build` – génère l'application dans `dist/`.
+- `npm test` – exécute les tests unitaires (via Karma).
+- `npm run e2e` – exécute les tests bout à bout une fois que vous avez configuré un outil compatible.
 
-## Running unit tests
+## Ressources
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Consultez la documentation Angular si vous avez besoin d'aide : https://angular.dev/tools/cli.
 
-## Running end-to-end tests
+## Landing company requests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- La collection `landing_company_requests` stocke les tentatives d'inscription d'une entreprise avant qu'un administrateur ne valide ou n'invite l'équipe.
+- Vérifiez que la collection existe dans la console Firebase (Firestore → Collections) et que vos règles autorisent uniquement la création des documents par l'utilisateur connecté.
+- Exemple de règle recommandée :
+  ```
+  match /landing_company_requests/{docId} {
+    allow create: if request.auth != null && request.auth.uid == request.resource.data.ownerUid;
+    allow read, update, delete, list: if false;
+  }
+  ```
+- Pour valider les permissions après modification des règles, exécutez `firebase deploy --only firestore:rules` ou utilisez l'éditeur de règles dans la console Firebase.

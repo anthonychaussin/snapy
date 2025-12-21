@@ -1,0 +1,118 @@
+<ion-content class="auth-page__content">
+    <div class="auth-card">
+      <p class="eyebrow">Créer un compte entreprise</p>
+      <h1>Configurez Snapy pour votre organisation</h1>
+      <p class="lead">
+        Connectez vos équipes, préparez vos premiers rapports et invitez vos partenaires en quelques minutes.
+      </p>
+
+      <section class="confirmation-panel" *ngIf="registrationState === 'success'">
+        <p class="confirmation-panel__title">Demande envoyée</p>
+        <p class="confirmation-panel__message">{{ successMessage }}</p>
+        <p class="confirmation-panel__time" *ngIf="lastSubmittedAt">
+          Dernière soumission : {{ lastSubmittedAt | date: 'short' }}
+        </p>
+        <div class="confirmation-panel__actions">
+          <ion-button
+            class="cta secondary"
+            type="button"
+            (click)="resend()"
+            [disabled]="isProcessing"
+          >
+            <span *ngIf="!isProcessing">Renvoyer la demande</span>
+            <span *ngIf="isProcessing">En cours...</span>
+          </ion-button>
+          <ion-button class="cta primary" type="button" (click)="goToDashboard()">
+            Accéder au tableau de bord
+          </ion-button>
+        </div>
+        <p class="confirmation-panel__note" *ngIf="resendCount">
+          Renvoyée {{ resendCount }} fois depuis cette session.
+        </p>
+      </section>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <label class="field">
+          <span>Nom de l'entreprise</span>
+          <ion-input
+            type="text"
+            formControlName="companyName"
+            placeholder="Nom de la société"
+          ></ion-input>
+          <small *ngIf="form.get('companyName')?.touched && form.get('companyName')?.invalid">
+            Ce champ est requis.
+          </small>
+        </label>
+
+        <label class="field">
+          <span>Email de contact</span>
+          <ion-input
+            type="email"
+            formControlName="email"
+            placeholder="operations@entreprise.com"
+            autocomplete="email"
+          ></ion-input>
+          <small *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+            Merci d'utiliser une adresse email valide.
+          </small>
+        </label>
+
+        <div class="password-row">
+          <label class="field">
+            <span>Mot de passe</span>
+            <ion-input
+              type="password"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="new-password"
+            ></ion-input>
+            <small *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+              Un mot de passe est requis.
+            </small>
+          </label>
+
+          <label class="field">
+            <span>Confirmer</span>
+            <ion-input
+              type="password"
+              formControlName="confirmPassword"
+              placeholder="••••••••"
+              autocomplete="new-password"
+            ></ion-input>
+            <small
+              *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.invalid"
+            >
+              Ce champ est requis.
+            </small>
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Téléphone de contact (optionnel)</span>
+          <ion-input type="tel" formControlName="contactPhone" placeholder="+33 1 23 45 67 89"></ion-input>
+        </label>
+
+        <p class="mismatch" *ngIf="passwordMismatch">
+          Les mots de passe ne correspondent pas.
+        </p>
+
+        <ion-button class="form-action primary" type="submit" [disabled]="isProcessing">
+          <span *ngIf="!isProcessing">Enregistrer une entreprise</span>
+          <span *ngIf="isProcessing">Création en cours...</span>
+        </ion-button>
+      </form>
+
+      <p class="error-message" *ngIf="error()">{{ error() }}</p>
+      <p
+        class="error-message"
+        *ngIf="registrationState === 'error' && !error()"
+      >
+        Nous n'avons pas pu enregistrer la demande, merci de réessayer.
+      </p>
+
+      <footer class="auth-footer">
+        <p>Déjà membre ?</p>
+        <a routerLink="/login">Se connecter</a>
+      </footer>
+    </div>
+  </ion-content>

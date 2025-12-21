@@ -1,10 +1,18 @@
 import { Component } from '@angular/core';
+import {IonRouterOutlet, IonApp} from '@ionic/angular/standalone';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
+             imports: [
+               IonRouterOutlet,
+               IonApp],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+             styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'snapy';
+  dark = true;
+
+  rightCLick($event: MouseEvent) {
+  }
 }
