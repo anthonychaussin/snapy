@@ -1,0 +1,32 @@
+<ion-content>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title>Vérification en cours</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid class="ion-padding">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-md="8" size-lg="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Vérification du compte</ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-text-center">
+            <div class="ion-margin-vertical">
+              <ion-spinner name="crescent" style="font-size: 2.5rem;"></ion-spinner>
+            </div>
+            <ion-text color="medium" class="ion-margin-vertical">
+              <p>Un e-mail de confirmation a été envoyé à <strong>{{ userEmail }}</strong>. Merci de cliquer sur le lien puis de revenir ici : nous détectons automatiquement la vérification.</p>
+            </ion-text>
+            <ion-text *ngIf="errorMessage" color="danger" class="ion-margin-vertical">
+              <p>{{ errorMessage }}</p>
+            </ion-text>
+            <ion-button expand="block" fill="clear" (click)="manualRefresh()" class="ion-margin-top">Vérifier maintenant</ion-button>
+            <ion-button expand="block" class="ion-margin-top" (click)="goToLanding()">Retourner à la landing page</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

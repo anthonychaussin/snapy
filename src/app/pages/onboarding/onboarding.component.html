@@ -1,0 +1,75 @@
+<ion-content>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title>Compléter l'entreprise</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid class="ion-padding">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-md="10" size-lg="7">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Finalisez votre accès</ion-card-title>
+            <ion-card-subtitle>Quelques informations pour configurer votre entreprise.</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Nous vous avons déjà créé un accès sécurisé. Complétez ces champs et nous enregistrons votre entreprise dans Firestore.</p>
+
+            <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+              <ion-list lines="full">
+                <ion-item>
+                  <ion-label position="stacked">Nom de l'entreprise</ion-label>
+                  <ion-input type="text" formControlName="companyName" placeholder="Nom officiel"></ion-input>
+                  @if (form.get('companyName')?.touched && form.get('companyName')?.invalid) {
+                    <ion-note slot="helper" color="danger">Ce champ est requis.</ion-note>
+                  }
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Secteur d'activité</ion-label>
+                  <ion-input type="text" formControlName="industry" placeholder="BTP, industrie, services..."></ion-input>
+                  @if (form.get('industry')?.touched && form.get('industry')?.invalid) {
+                    <ion-note slot="helper" color="danger">Ce champ est requis.</ion-note>
+                  }
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Téléphone principal</ion-label>
+                  <ion-input type="tel" formControlName="contactPhone" placeholder="+33 1 23 45 67 89"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Lieu principal</ion-label>
+                  <ion-input type="text" formControlName="officeLocation" placeholder="Paris, France"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Présentation</ion-label>
+                  <ion-textarea formControlName="description" placeholder="Décrivez vos objectifs ou contraintes pour Snapy"></ion-textarea>
+                </ion-item>
+              </ion-list>
+
+              <ion-text color="medium">Email associé : {{ userEmail }}</ion-text>
+
+              <ion-button expand="block" type="submit" [disabled]="isProcessing" class="ion-margin-top">
+                @if (!isProcessing) {
+                  <span>Valider et continuer</span>
+                }
+                @if (isProcessing) {
+                  <span>Enregistrement en cours...</span>
+                }
+              </ion-button>
+            </form>
+
+            @if (state === 'error') {
+              <ion-text color="danger" class="ion-margin-top">
+                Impossible d'enregistrer les informations, merci de réessayer plus tard.
+              </ion-text>
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

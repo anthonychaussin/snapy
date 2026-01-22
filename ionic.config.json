@@ -1,6 +1,7 @@
 {
-  "name": "snpay-app",
-  "app_id": "",
+  "name": "Snpay",
   "type": "angular",
-  "integrations": {}
+  "integrations": {
+    "capacitor": {}
+  }
 }

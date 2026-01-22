@@ -7,14 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
-          "standalone": false
-        },
-        "@schematics/angular:directive": {
-          "standalone": false
-        },
-        "@schematics/angular:pipe": {
-          "standalone": false
+          "style": "scss"
         }
       },
       "root": "",
@@ -22,64 +15,31 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "public",
+            "outputPath": "dist/snapy",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "glob": "**/*.svg",
-                "input": "node_modules/ionicons/dist/ionicons/svg",
-                "output": "./svg"
               }
             ],
             "styles": [
-              "src/styles.scss",
               {
-                "input": "node_modules/@ionic/angular/css/core.css"
+                "input": "node_modules/@ionic/angular/css/ionic.bundle.css"
               },
               {
-                "input": "node_modules/@ionic/angular/css/normalize.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/structure.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/typography.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/display.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/padding.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/float-elements.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/text-alignment.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/text-transformation.css"
-              },
-              {
-                "input": "node_modules/@ionic/angular/css/flex-utils.css"
-              },
-              {
-                "input": "src/theme/variables.scss"
+                "input": "node_modules/@ionic/angular/css/palettes/dark.system.css"
               }
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "localforage"
+            ]
           },
           "configurations": {
             "production": {
@@ -87,7 +47,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumError": "3MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -115,18 +75,18 @@
               "sourceMap": true
             },
             "staging": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "buildTarget": "snapy:build"
+          },
           "configurations": {
             "production": {
               "buildTarget": "snapy:build:production"
@@ -135,42 +95,13 @@
               "buildTarget": "snapy:build:development"
             },
             "staging": {
-              "browserTarget": "app:build:staging"
+              "buildTarget": "snapy:build:staging"
             }
           },
           "defaultConfiguration": "staging"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "snapy:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
-            "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              },
-              {
-                "glob": "**/*.svg",
-                "input": "node_modules/ionicons/dist/ionicons/svg",
-                "output": "./svg"
-              }
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
-          }
+          "builder": "@angular-devkit/build-angular:extract-i18n"
         },
         "ionic-cordova-serve": {
           "builder": "@ionic/angular-toolkit:cordova-serve",

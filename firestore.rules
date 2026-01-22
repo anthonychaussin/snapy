@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isManager(projectId) {
+      let project = get(/databases/$(database)/documents/projects/$(projectId));
+      return project.exists() &&
+        project.data.manager_ids != null &&
+        project.data.manager_ids.hasAny([request.auth.uid]);
+    }
+
+    match /users/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /company_profiles/{userId} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow create, update: if isSignedIn() &&
+        request.auth.uid == userId &&
+        request.resource.data.ownerUid == request.auth.uid;
+      allow delete: if false;
+    }
+
+    match /landing_company_requests/{requestId} {
+      allow create: if isSignedIn() &&
+        request.resource.data.ownerUid == request.auth.uid;
+      allow read, update, delete, list: if false;
+    }
+
+    match /time_entries/{entryId} {
+      allow read: if isSignedIn() && (
+        resource.data.user_id == request.auth.uid ||
+        isManager(resource.data.project_id)
+      );
+      allow create: if isSignedIn() &&
+        request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if isSignedIn() &&
+        resource.data.user_id == request.auth.uid;
+    }
+
+    match /projects/{projectId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && isManager(projectId);
+    }
+
+    match /activities/{activityId} {
+      allow read: if isSignedIn() && resource.data.user_id == request.auth.uid;
+      allow create: if isSignedIn() &&
+        request.resource.data.user_id == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

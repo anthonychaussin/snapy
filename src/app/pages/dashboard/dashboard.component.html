@@ -1,0 +1,234 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Tableau de bord</ion-card-subtitle>
+            <ion-card-title>
+              Bonjour,
+              <span>{{ authStore.user()?.displayName ?? authStore.user()?.email ?? 'pilote' }}</span>
+            </ion-card-title>
+            <ion-card-subtitle>Visualisez votre entreprise, vos équipes et vos rapports en un seul endroit.</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-button expand="block" (click)="logout()">Se déconnecter</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Détails de l'entreprise</ion-card-title>
+            <ion-card-subtitle>Modifiez les informations visibles par vos équipes</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="companyForm" (ngSubmit)="saveCompanyDetails()">
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-label position="stacked">Nom de l'entreprise</ion-label>
+                  <ion-input formControlName="companyName" type="text" placeholder="Snapy"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Secteur d’activité</ion-label>
+                  <ion-input formControlName="industry" type="text" placeholder="Terrain, maintenance..."></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Téléphone</ion-label>
+                  <ion-input formControlName="contactPhone" type="tel" placeholder="+33 1 23 45 67 89"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Adresse des locaux</ion-label>
+                  <ion-input formControlName="officeLocation" type="text" placeholder="Paris 9e"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Description</ion-label>
+                  <ion-textarea formControlName="description" placeholder="Mission, positionnement, valeurs..."></ion-textarea>
+                </ion-item>
+              </ion-list>
+
+              <ion-button expand="block" type="submit" [disabled]="companySaving">
+                @if (!companySaving) {
+                  <span>Enregistrer</span>
+                }
+                @if (companySaving) {
+                  <span>Enregistrement...</span>
+                }
+              </ion-button>
+            </form>
+
+            @if (companyMessage) {
+              <ion-text color="success">{{ companyMessage }}</ion-text>
+            }
+            @if (companyError) {
+              <ion-text color="danger">{{ companyError }}</ion-text>
+            }
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" sizeMd="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Votre équipe</ion-card-title>
+            <ion-card-subtitle>{{ activeMembers().length }} membres actifs</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="inviteForm" (ngSubmit)="inviteEmployee()">
+              <ion-item>
+                <ion-label position="stacked">Email professionnel</ion-label>
+                <ion-input
+                  type="email"
+                  formControlName="email"
+                  placeholder="prenom.nom@entreprise.com"
+                  autocomplete="email"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Rôle</ion-label>
+                <ion-select interface="popover" formControlName="role">
+                  @for (option of roleOptions; track option.value) {
+                    <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+                  }
+                </ion-select>
+              </ion-item>
+
+              <ion-button expand="block" type="submit" [disabled]="inviteProcessing">
+                Inviter
+              </ion-button>
+            </form>
+
+            @if (inviteMessage) {
+              <ion-text color="success">{{ inviteMessage }}</ion-text>
+            }
+            @if (inviteError) {
+              <ion-text color="danger">{{ inviteError }}</ion-text>
+            }
+
+            <ion-list lines="none" class="team-list ion-margin-top">
+              @for (member of activeMembers(); track member.id) {
+                <ion-item>
+                  <ion-label>
+                    <h3>{{ member.email }}</h3>
+                    <p>{{ getRoleLabel(member.role) }}</p>
+                  </ion-label>
+                  <ion-select
+                    slot="end"
+                    [value]="member.role"
+                    (ionChange)="updateMemberRole(member, $event.detail.value)"
+                  >
+                    @for (option of roleOptions; track option.value) {
+                      <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+                    }
+                  </ion-select>
+                </ion-item>
+              }
+              @if (!activeMembers().length) {
+                <ion-item>
+                  <ion-label>Aucun membre actif pour le moment.</ion-label>
+                </ion-item>
+              }
+            </ion-list>
+
+            <ion-list lines="none" class="team-list">
+              <ion-item lines="none">
+                <ion-label>
+                  <p>Invitations en attente</p>
+                </ion-label>
+              </ion-item>
+              @for (invite of pendingInvites(); track invite.id) {
+                <ion-item>
+                  <ion-label>
+                    <h3>{{ invite.email }}</h3>
+                    <p class="ion-text-wrap">
+                      {{ getRoleLabel(invite.role) }}
+                      <br/>
+                      Partager {{ buildInviteLink(invite.id) }}
+                    </p>
+                  </ion-label>
+                </ion-item>
+              }
+              @if (!pendingInvites().length) {
+                <ion-item>
+                  <ion-label>Aucune invitation en attente.</ion-label>
+                </ion-item>
+              }
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" sizeMd="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Projets</ion-card-title>
+            <ion-card-subtitle>{{ projectCount() }} projets suivis</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="none">
+              @for (project of recentProjects(); track project.Uuid) {
+                <ion-item>
+                  <ion-label>
+                    <h3>{{ project.Name || 'Projet sans nom' }}</h3>
+                    <p>{{ project.Description || 'Aucune description fournie' }}</p>
+                  </ion-label>
+                </ion-item>
+              }
+              @if (!recentProjects().length) {
+                <ion-item>
+                  <ion-label>Aucun projet actif pour l’instant.</ion-label>
+                </ion-item>
+              }
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" sizeMd="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Interventions terrain</ion-card-title>
+            <ion-card-subtitle>{{ missionCount() }} missions</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text>Suivi de {{ projectCount() }} projets connectés.</ion-text>
+            <ion-list lines="none">
+              @for (mission of recentMissions(); track mission.Uuid) {
+                <ion-item>
+                  <ion-label>{{ mission.Name || 'Mission sans intitulé' }}</ion-label>
+                </ion-item>
+              }
+              @if (!recentMissions().length) {
+                <ion-item>
+                  <ion-label>Démarrez une mission pour qu'elle apparaisse ici.</ion-label>
+                </ion-item>
+              }
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-content>
+            <ion-text>
+              {{ companyCount() }} organisation, {{ projectCount() }} projets et {{ missionCount() }} interventions sont rafraîchis en temps réel par vos équipes.
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,93 @@
+<ion-content fullscreen>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title>Snapy</ion-title>
+      <ion-buttons slot="end">
+        <ion-button routerLink="/register-company" fill="clear" size="small">Créer un compte</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid class="ion-padding">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-col size="12" size-md="8" size-lg="5">
+        <ion-card>
+          <ion-card-header>
+            <ion-badge color="tertiary">Connexion</ion-badge>
+            <ion-card-title>Accédez à Snapy</ion-card-title>
+            <ion-card-subtitle>Suivez vos interventions et recevez des rapports fiables en quelques secondes.</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+              <ion-list lines="full">
+                <ion-item>
+                  <ion-label position="stacked">Email professionnel</ion-label>
+                  <ion-input
+                    type="email"
+                    formControlName="email"
+                    placeholder="exemple@entreprise.com"
+                    autocomplete="username"
+                  ></ion-input>
+                  @if (form.get('email')?.touched && form.get('email')?.invalid) {
+                    <ion-note slot="helper" color="danger">
+                      Merci de saisir une adresse email valide.
+                    </ion-note>
+                  }
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Mot de passe</ion-label>
+                  <ion-input
+                    type="password"
+                    formControlName="password"
+                    placeholder="••••••••"
+                    autocomplete="current-password"
+                  ></ion-input>
+                  @if (form.get('password')?.touched && form.get('password')?.invalid) {
+                    <ion-note slot="helper" color="danger">
+                      Un mot de passe est requis.
+                    </ion-note>
+                  }
+                </ion-item>
+              </ion-list>
+
+              <ion-button expand="block" type="submit" [disabled]="isLoading">
+                @if (!isLoading) {
+                  <span>Se connecter</span>
+                }
+                @if (isLoading) {
+                  <span>Connexion en cours...</span>
+                }
+              </ion-button>
+            </form>
+
+            @if (manualError) {
+              <ion-text color="danger" class="ion-padding-start">
+                {{ manualError }}
+              </ion-text>
+            }
+
+            @if (error()) {
+              <ion-text color="danger" class="ion-padding-start">
+                {{ error() }}
+              </ion-text>
+            }
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card>
+          <ion-card-content>
+            <ion-row class="ion-align-items-center ion-justify-content-between">
+              <ion-col>
+                <ion-text color="medium">Pas encore de compte ?</ion-text>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-button routerLink="/register-company" fill="outline" size="small">Enregistrer une entreprise</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
